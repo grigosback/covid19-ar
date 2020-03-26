@@ -94,23 +94,8 @@ plt.ylabel("N° de contagios")
 plt.legend(["Datos", "Estimación"])
 # plt.xlim(5,20)
 # plt.ylim(0,175)
-plt.savefig("covid.png", dpi=300)
+plt.savefig("graphs/covid.png", dpi=200, bbox_inches="tight")
 plt.show()
 
-# %%
-day = 21
-a * np.exp((day - 5) * b) - a * np.exp((day - 6) * b)
-
-# %%
-a * np.exp((50) * b)
-
-# %%
-128 - 97
-
-# %%
-popt
-
-# %%
-pcov
 
 # %%
