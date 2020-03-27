@@ -16,46 +16,79 @@ matplotlib.use("Agg")
 
 # Conseguir la fecha actual, de mañana y de pasado mañana
 today = date.today()
-today = today.strftime("%d")
+today = today.strftime("%#m/%#d/%y")
+print(today)
 
 # # Conseguir Datos de John Hopkins University
 # url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
 # data = pd.read_csv(url)
 
 # Ingreso manual de datos
-days = np.array(
-    [
-        5,
-        6,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31,
-    ]
+data = pd.Series(
+	[
+		'3/5/20',
+        '3/6/20',
+        '3/8/20',
+        '3/9/20',
+        '3/10/20',
+        '3/11/20',
+        '3/12/20',
+        '3/13/20',
+        '3/14/20',
+        '3/15/20',
+        '3/16/20',
+        '3/17/20',
+        '3/18/20',
+        '3/19/20',
+        '3/20/20',
+        '3/21/20',
+        '3/22/20',
+        '3/23/20',
+        '3/24/20',
+        '3/25/20',
+        '3/26/20',
+        '3/27/20',
+        '3/28/20',
+        '3/29/20',
+        '3/30/20',
+        '3/31/20',
+	]
 )
-today_index = days.tolist().index(int(today))
 
-days = days - days[0]
+# days = np.array(
+#     [
+#         5,
+#         6,
+#         8,
+#         9,
+#         10,
+#         11,
+#         12,
+#         13,
+#         14,
+#         15,
+#         16,
+#         17,
+#         18,
+#         19,
+#         20,
+#         21,
+#         22,
+#         23,
+#         24,
+#         25,
+#         26,
+#         27,
+#         28,
+#         29,
+#         30,
+#         31,
+#     ]
+# )
+today_index = data.tolist().index(today)
+# today_index = data.str.index(today) 
+
+
 cases = np.array(
     [
         1,
@@ -78,18 +111,24 @@ cases = np.array(
         301,
         385,
         502,
+        589,
     ]
 )
 end = len(cases)
+print(data[:])
+xfechas = pd.to_datetime(data[:])
+print(xfechas)
+# dias_dt = np.array(xfechas - np.datetime64('2020-01-01'))/ np.timedelta64(1,'D')
+# print(dias_dt)
 
-popt, pcov = curve_fit(exponenial_func, days[2:end], cases[2:end])
+popt, pcov = curve_fit(exponenial_func, data.index[2:end], cases[2:end])
 a = popt[0]
 b = popt[1]
-fit = a * np.exp(days * b)
-fit_sup = (a + pcov[0, 0] ** 0.5) * np.exp(days * (b + pcov[1, 1] ** 0.5))
-fit_inf = (a - pcov[0, 0] ** 0.5) * np.exp(days * (b - pcov[1, 1] ** 0.5))
+fit = a * np.exp(data.index * b)
+fit_sup = (a + pcov[0, 0] ** 0.5) * np.exp(data.index * (b + pcov[1, 1] ** 0.5))
+fit_inf = (a - pcov[0, 0] ** 0.5) * np.exp(data.index * (b - pcov[1, 1] ** 0.5))
 
-xs = days[0:end] + 5
+xs = data.index[0:end] + 5
 ys = cases
 
 # Plot de Casos Confirmados
@@ -101,8 +140,9 @@ params = {"ytick.color" : '#78c9ff',
 plt.rcParams.update(params)
 ax = fig.add_subplot(111)
 plt.grid()
-ax.plot(xs, ys, "o")
-for x,y in zip(xs,ys):
+ax.plot(data[:end], ys, "o")
+tmp = plt.xticks(rotation='vertical')
+for x,y in zip(data[:end],ys):
     label = y
     ax.annotate(label, # this is the text
                  (x,y), # this is the point to label
@@ -110,7 +150,7 @@ for x,y in zip(xs,ys):
                  xytext=(0,10), # distance from text to points (x,y)
                  ha='center',
                  color='#78c9ff') # horizontal alignment can be left, right or center
-plt.xlabel("Día de marzo")
+plt.xlabel("Fecha")
 plt.ylabel("Casos Confirmados")
 fig.patch.set_facecolor('#78c9ff')
 fig.patch.set_alpha(0.1)
@@ -129,12 +169,12 @@ params = {"ytick.color" : '#78c9ff',
 plt.rcParams.update(params)
 ax = fig.add_subplot(111)
 # plt.yscale("Log")
-ax.plot(days[0:end] + 5, cases, "o")
-ax.plot(days + 5, fit)
-ax.plot(days + 5, fit_sup, linestyle="--")
-ax.plot(days + 5, fit_inf, linestyle="--")
-plt.fill_between(days + 5, fit_sup, fit_inf, color="gray")
-plt.xlabel("Día de marzo")
+ax.plot(data[:end], cases, "o")
+ax.plot(data, fit)
+ax.plot(data, fit_sup, linestyle="--")
+ax.plot(data, fit_inf, linestyle="--")
+plt.fill_between(data, fit_sup, fit_inf, color="gray")
+plt.xlabel("Fecha")
 plt.ylabel("N° de contagios")
 plt.legend(["Datos", "Estimación", "Cota superior", "Cota inferior"])
 # plt.xlim(5,20)
@@ -143,6 +183,7 @@ fig.patch.set_facecolor('#78c9ff')
 fig.patch.set_alpha(0.1)
 ax.patch.set_facecolor('#78c9ff')
 ax.patch.set_alpha(0.01)
+tmp = plt.xticks(rotation='vertical')
 plt.savefig("graphs/covid.png", dpi=200, bbox_inches="tight")
 # plt.show()
 
@@ -154,8 +195,7 @@ plt.savefig("graphs/covid.png", dpi=200, bbox_inches="tight")
 # # argdata = data.loc[lambda data: data['Province/State'] == 'Hubei'] # (en caso de que se trate de una provincia)
 
 
-# xfechas = pd.to_datetime(argdata[argdata.index.str.contains("/20")].index)
-# x = np.array(xfechas - np.datetime64('2020-01-01'))/ np.timedelta64(1,'D')
+
 # y = (argdata.to_numpy()[4:])[:,0].transpose()
 
 
