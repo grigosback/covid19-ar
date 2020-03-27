@@ -68,6 +68,7 @@ cases = np.array(
         301,
         385,
         502,
+        589,
     ]
 )
 end = len(cases)
