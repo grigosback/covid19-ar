@@ -70,6 +70,7 @@ cases = np.array(
         502,
         589,
         690,
+        745,
     ]
 )
 end = len(cases)
@@ -85,7 +86,7 @@ fit_inf = (a - pcov[0, 0] ** 0.5) * np.exp(days * (b - pcov[1, 1] ** 0.5))
 # %%
 plt.figure(figsize=(10, 5))
 plt.grid()
-plt.yscale("Log")
+# plt.yscale("Log")
 plt.plot(days[0:end] + 5, cases, "o")
 plt.plot(days + 5, fit)
 plt.plot(days + 5, fit_sup, linestyle="--")
