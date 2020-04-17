@@ -52,6 +52,29 @@ data = pd.Series(
         '3/29/20',
         '3/30/20',
         '3/31/20',
+        '4/1/20',
+        '4/2/20',
+        '4/3/20',
+        '4/4/20',
+        '4/5/20',
+        '4/6/20',
+        '4/7/20',
+        '4/8/20',
+        '4/9/20',
+        '4/10/20',
+        '4/11/20',
+        '4/12/20',
+        '4/13/20',
+        '4/14/20',
+        '4/15/20',
+        '4/16/20',
+        '4/17/20',
+        '4/18/20',
+        '4/19/20',
+        '4/20/20',
+        '4/21/20',
+        '4/22/20',
+
 	]
 )
 
@@ -112,6 +135,25 @@ cases = np.array(
         385,
         502,
         589,
+        690,
+        745,
+        820,
+        966,
+        1054,
+        1054,
+        1133,
+        1265,
+        1451,
+        1451,
+        1554,
+        1628,
+        1715,
+        1795,
+        1975,
+        1975,
+        2142,
+        2208,
+        2277,
     ]
 )
 end = len(cases)
@@ -276,28 +318,28 @@ with open('Dashboard.html') as html_file:
 
 	new_tag = soup.new_tag("p")
 	new_tag['id'] = "Stats"
-	texto = "El último dato que tenemos es " + str(round(cases[today_index-1]))+ " del día de ayer"
+	texto = "El último dato que tenemos es " + str(round(cases[-1]))+ " del día de ayer"
 	new_tag.string = texto
 	for tag in soup.find_all(id="Stats"):
 		tag.replace_with(new_tag)
 
 	new_tag = soup.new_tag("p")
 	new_tag['id'] = "Pred0"
-	texto = "Para hoy se estiman "+str(round(fit[today_index]))+" casos, con una cota superior de "+str(round(fit_sup[today_index]))+" y una cota inferior de "+str(round(fit_inf[today_index]))
+	texto = "Para hoy se estiman "+str(round(fit[-10]))+" casos, con una cota superior de "+str(round(fit_sup[-10]))+" y una cota inferior de "+str(round(fit_inf[-10]))
 	new_tag.string = texto
 	for tag in soup.find_all(id="Pred0"):
 		tag.replace_with(new_tag)
 
 	new_tag = soup.new_tag("p")
 	new_tag['id'] = "Pred1"
-	texto = "Para mañana se estiman "+str(round(fit[today_index+1]))+" casos, con una cota superior de "+str(round(fit_sup[today_index+1]))+" y una cota inferior de "+str(round(fit_inf[today_index+1]))
+	texto = "Para mañana se estiman "+str(round(fit[-9]))+" casos, con una cota superior de "+str(round(fit_sup[-9]))+" y una cota inferior de "+str(round(fit_inf[-9]))
 	new_tag.string = texto
 	for tag in soup.find_all(id="Pred1"):
 		tag.replace_with(new_tag)
 
 	new_tag = soup.new_tag("p")
 	new_tag['id'] = "Pred2"
-	texto = "Para pasado mañana se estiman "+str(round(fit[today_index+2]))+" casos, con una cota superior de "+str(round(fit_sup[today_index+2]))+" y una cota inferior de "+str(round(fit_inf[today_index+2]))
+	texto = "Para pasado mañana se estiman "+str(round(fit[-8]))+" casos, con una cota superior de "+str(round(fit_sup[-8]))+" y una cota inferior de "+str(round(fit_inf[-8]))
 	new_tag.string = texto
 	for tag in soup.find_all(id="Pred2"):
 		tag.replace_with(new_tag)
